@@ -1,0 +1,98 @@
+<html>
+<head>
+<title> Custom Game </title>
+<script src="https://simplycodingcourses.com/files/simply.js"></script>
+<script>
+function start(){
+	var lives = 3;
+	var spawnSpeed = 800
+sjs.open("target",800,500);
+var background = new sjs.Image("Images/background.png");
+ background.setSize(800,500)
+ var livesDisplay = new sjs.Text("Lives: " + lives, 30);
+livesDisplay.moveTo(10, 10);
+livesDisplay.node.style.color = "white";
+livesDisplay.node.style.zIndex = 1000;
+
+var score = 0;
+var scoreDisplay = new sjs.Text("Score: " + score, 30);
+scoreDisplay.moveTo(650, 10);
+scoreDisplay.node.style.color = "white";
+scoreDisplay.node.style.zIndex = 1000;
+
+var floor = new sjs.Image("Images/blank.png"); 
+floor.setSize(sjs.getWidth(), 50);              
+floor.moveTo(0, sjs.getHeight()-50);             
+floor.type = "bottom_screen";                 
+floor.noBounds = true;
+
+ //player
+ var player = new sjs.Image("Images/ice.png");
+ player.type = "player";
+ player.setSize(85,83);
+ player.bottom();
+ player.centerH();
+ player.setGravity(0);
+ player.friction = .1;
+ player.accel = 0.3;
+
+ //player movements
+ sjs.keyDown(RIGHT_KEY, function(){
+ player.pushRight();
+ });
+ sjs.keyDown(LEFT_KEY,function(){
+ player.pushLeft();
+ });
+
+ //icicle spawning
+ var icicleImages = ["Images/icicle.png", "Images/sharp.png"];
+ function spawnIcicle(){
+    var x = Math.floor(Math.random() * (sjs.getWidth() - 50));
+    var img = icicleImages[Math.floor(Math.random() * icicleImages.length)];
+
+    var icicle = new sjs.Image(img);
+    icicle.type = "icicle";
+    icicle.setSize(50,50);
+    icicle.moveTo(x, 0);
+
+    setTimeout(function(){
+        icicle.setGravity(3);
+    }, 1000);
+    
+    if(spawnSpeed > 250){
+        spawnSpeed -= 20; 
+    }
+
+    setTimeout(spawnIcicle, spawnSpeed);
+}
+
+spawnIcicle();
+
+sjs.onHit("icicle","bottom_screen",function(x,y){
+	x.destroy();
+	score++;
+    scoreDisplay.setText("Score: " + score);
+    localStorage.setItem("score", score);
+
+});
+
+ // player lives
+sjs.onHit("player","icicle", function(x,y){
+	y.destroy();   
+    lives--;
+    livesDisplay.setText("Lives: " + lives);
+	if(lives <= 0){
+	window.location = "gameover.html";
+	}
+
+});
+
+} //end start
+</script>
+</head>
+<body onload="start()">
+<h1> Custom Game </h1>
+
+<div id="target" style="margin:auto;background:grey;"></div>
+</body>
+</html>
