@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> Game Over </title>
+<script src="https://simplycodingcourses.com/files/simplyjs/simply.js"></script>
+<script>
+function start(){
+sjs.open();
+var background = new sjs.Image("Images/background.png");
+ background.setSize(500,400)
+var lose_txt = new sjs.Text("YOU LOSE", 44, "red");
+lose_txt.center().offset(0,-50);
+var homeBtn = new sjs.Button("Home", function(){
+	window.location = "index.html";
+});
+homeBtn.center();
+var score_txt = new sjs.Text("Score: 0", 21, "orange");
+score_txt.setText("Score: " +localStorage.getItem("score"));
+}
+</script>
+</head>
+<body onload="start()">
+<h1> Game Over </h1>
+
+<div id="target" style="margin:auto;background:grey;"></div>
+</body>
+</html>
